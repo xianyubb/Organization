@@ -1,0 +1,11 @@
+{
+  "name": "organization",
+  "entry": "index.js",
+  "type": "lse-nodejs",
+  "version": "0.1.0",
+  "dependencies": [
+    {
+      "name": "legacy-script-engine-nodejs"
+    }
+  ]
+}
