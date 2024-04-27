@@ -7,10 +7,4 @@ const manifest = require("./manifest.json");
 
 export const PLUGIN_NAME = manifest.name;
 
-console.log(PLUGIN_NAME)
-
-require("./src/Data/KVDB");
-require("./src/Body/main");
-require("./src/Command/Command");
-require("./src/Config/Config");
-
+export const path = `./plugins/${PLUGIN_NAME}//Data/`;

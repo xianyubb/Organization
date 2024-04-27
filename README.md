@@ -2,15 +2,15 @@
 
 > Task
 
-1. - [x] create organization
+1. - [ ] create org
 
-2. - [x] delete organization
+2. - [ ] delete org
 
-3. - [ ] manage organization (kick / invite / change owner / give admin / other)
+3. - [ ] manage org (kick / invite / change owner / give admin / other)
 
-4. - [x] Join orginization (apply / formal join)
+4. - [ ] Join org (apply / formal join)
 
-5. - [x] leave organization
+5. - [ ] leave org
 
 6. - [ ] Gui form
 

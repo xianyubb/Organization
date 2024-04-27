@@ -21,7 +21,7 @@ parserOptions:
     - './external/*/client/tsconfig.json'
 
 rules:
-  camelcase: 'off'
+  camelcase: 2
   global-require: 'off'
   max-classes-per-file: 'off'
   # no-bitwise: "off"
