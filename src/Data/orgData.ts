@@ -1,6 +1,6 @@
 import *as fs from 'fs';
 import { path } from "../..";
-import { orgLevel } from "../Enum/orgEnum";
+import { orgLevel, playerLevel } from "../Enum/orgEnum";
 
 
 
@@ -10,7 +10,7 @@ export type orgMember = {
     /** 玩家Xuid */
     xuid: string;
     /** 玩家在公会中的权限 */
-    level: orgLevel;
+    level: playerLevel;
     /** 玩家加入公会的日期 */
     time: string;
 };
@@ -32,7 +32,7 @@ export type orgManager = {
     /** 公积金 */
     cpf: number;
     /** 获取公积金所需等级 */
-    getCpfLevel: orgLevel;
+    getCpfLevel: playerLevel;
 };
 
 

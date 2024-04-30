@@ -3,9 +3,13 @@ import { path } from "../..";
 import { orgData } from './orgData';
 
 
+function updateData(orgdata: Array<orgData>) {
+    fs.writeFileSync(`${path}/orgData.json`, JSON.stringify(orgdata));
+}
+
 
 export class HandleData {
-    data: Array<orgData>;
+    private data: Array<orgData>;
 
     constructor() {
         this.data = JSON.parse(fs.readFileSync(`${path}/orgData.json`).toString());
@@ -41,8 +45,24 @@ export class HandleData {
                 return true;
             }
             return false;
-        }, {});
+        });
         return org;
     }
 
+    /**
+     * 更新公会数据文件
+     * @param orgdata 需要更新的公会
+     */
+    updateOrgData(orgdata: orgData) {
+        this.data.find((_org: orgData, index: number) => {
+            if (_org.uuid === orgdata.uuid) {
+                this.data[index] = orgdata;
+                return true;
+            }
+            return false;
+        }, {});
+        updateData(this.data);
+    }
 }
+
+
