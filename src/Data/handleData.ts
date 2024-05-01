@@ -40,13 +40,30 @@ export class HandleData {
     getOrgData(uuid: string) {
         let org: orgData | null = null;
         this.data.find((_org: orgData) => {
-            if (org.uuid === uuid) {
+            if (_org.uuid === uuid) {
                 org = _org;
                 return true;
             }
             return false;
         });
         return org;
+    }
+
+    /**
+    * uuid获取目标公会下标
+    * @param uuid 公会uuid
+    * @returns 获取成功返回公会下标 失败则返回-1
+    */
+    getOrgDataIndex(uuid: string) {
+        let index: number = -1;
+        this.data.find((_org: orgData, _index: number) => {
+            if (_org.uuid === uuid) {
+                index = _index;
+                return true;
+            }
+            return false;
+        });
+        return index;
     }
 
     /**
@@ -62,6 +79,22 @@ export class HandleData {
             return false;
         }, {});
         updateData(this.data);
+    }
+
+    /**
+     * 删除公会
+     * @param uuid 删除公会的uuid
+     */
+    deleteOrg(uuid: string) {
+        this.data.splice(this.getOrgDataIndex(uuid), 1);
+        updateData(this.data);
+    }
+
+    /** 
+     * 公会名列表
+     */
+    get nameList() {
+        return this.data.map((_org: orgData) => _org.name);
     }
 }
 

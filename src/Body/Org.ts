@@ -1,15 +1,18 @@
 import { HandleData } from "../Data/handleData";
 import { orgData, orgManager, orgMember, transPoints } from "../Data/orgData";
+import { playerData } from "../Data/playerData";
 import { orgLevel, playerLevel } from "../Enum/orgEnum";
 
 
-export class Organization extends HandleData {
+export class Organization {
     private orgdata: orgData;
 
+    handleData: HandleData;
+
     constructor(org: orgData) {
-        super();
         this.orgdata = org;
         this.updateData();
+        this.handleData = new HandleData();
     }
 
     /** 公会名 */
@@ -56,7 +59,7 @@ export class Organization extends HandleData {
      * 更新公会数据
      */
     updateData() {
-        this.updateOrgData(this.orgdata);
+        this.handleData.updateOrgData(this.orgdata);
     }
 
     /** 
@@ -90,7 +93,15 @@ export class Organization extends HandleData {
             }
         }
         this.updateData();
-        return this.members.indexOf(orgmenber[0]) !== -1;
+        if (this.members.indexOf(orgmenber[0]) !== -1) {
+            const a: Array<string> = playerData.init(xuid, []);
+            if (a.indexOf(this.orgdata.uuid) === -1) {
+                a.push(this.orgdata.uuid);
+                playerData.set(xuid, a);
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -104,6 +115,11 @@ export class Organization extends HandleData {
         for (i = 0; i < this.members.length; i += 1) {
             if (this.members[i].xuid === xuid) {
                 orgmenber = this.members.splice(i, 1);
+                const a = playerData.get(xuid);
+                if (a.indexOf(this.orgdata.uuid) !== -1) {
+                    a.splice(a.indexOf(this.orgdata.uuid), 1);
+                    playerData.set(xuid, a);
+                }
                 break;
             }
         }
@@ -224,52 +240,14 @@ export class Organization extends HandleData {
         this.updateData();
         return this.orgdata.manager.getCpfLevel === level;
     }
-}
 
-// 生成随机码
-function createUUID() {
-    let code: string = "";
-    const codeLength = 6;// 验证码的长度  
-    const random = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];// 随机数  
-    for (let i = 0; i < codeLength; i += 1) {// 循环操作  
-        const index = Math.floor(Math.random() * 61);// 取得随机数的索引（0~35）  
-        code += random[index];// 根据索引取得随机数加到code上  
+    /** 添加申请成员
+     * @param player 添加的玩家
+     */
+    addApplyList(player: orgMember) {
+        this.orgdata.applyList.push(player);
+        this.updateData();
+        return this.orgdata.applyList.indexOf(player) !== -1;
     }
-    return code;
 }
 
-/**
- * 玩家创建公会
- * @param player 创建公会的玩家
- * @param orgName 公会名称
- * @returns 
- */
-export function createOrg(player: Player, orgName: string) {
-    const uuid = createUUID();
-    const orgdata: orgData = {
-        name: orgName,
-        uuid,
-        level: orgLevel.Normal,
-        members: [{
-            name: player.name,
-            xuid: player.xuid,
-            level: playerLevel.Owner,
-            time: new Date().toLocaleString()
-        }],
-        time: new Date().toLocaleString(),
-        manager: {
-            maxPlayer: 5,
-            transPoints: [],
-            mainPosition: {
-                name: "总部",
-                pos: [0, 0, 0]
-            },
-            cpf: 0,
-            getCpfLevel: playerLevel.Member
-        },
-        applyList: []
-    };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const a = new Organization(orgdata);
-}

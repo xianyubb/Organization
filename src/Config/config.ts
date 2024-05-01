@@ -68,4 +68,5 @@ const config: Config = {
 
 conf.write(JSON.stringify(config));
 
+/** 配置项 */
 export const Conf: Config = JSON.parse(conf.read());
