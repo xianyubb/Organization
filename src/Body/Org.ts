@@ -11,7 +11,6 @@ export class Organization {
 
     constructor(org: orgData) {
         this.orgdata = org;
-        this.updateData();
         this.handleData = new HandleData();
     }
 
@@ -77,6 +76,21 @@ export class Organization {
         return -1;
     }
 
+    /** 
+     * 通过xuid查找公会中的人
+     * @param xuid xuid
+     * @return 
+     */
+    findPlayerData(xuid: string) {
+        let i = 0;
+        for (i = 0; i < this.members.length; i += 1) {
+            if (this.members[i].xuid === xuid) {
+                return this.members[i];
+            }
+        }
+        return null;
+    }
+
     /**
      * 允许玩家加入公会 
      * @param xuid 需要加入的玩家的xuid
@@ -94,7 +108,7 @@ export class Organization {
         }
         this.updateData();
         if (this.members.indexOf(orgmenber[0]) !== -1) {
-            const a: Array<string> = playerData.init(xuid, []);
+            const a: Array<string> = playerData.get(xuid);
             if (a.indexOf(this.orgdata.uuid) === -1) {
                 a.push(this.orgdata.uuid);
                 playerData.set(xuid, a);

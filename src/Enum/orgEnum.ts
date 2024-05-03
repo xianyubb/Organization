@@ -11,3 +11,15 @@ export enum playerLevel {
     Manager = 1,
     Owner = 2
 }
+
+export function LeveltoString(level: orgLevel) {
+    switch (level) {
+        case orgLevel.Normal:
+            return "Normal";
+        case orgLevel.Middle:
+            return "Middle";
+        case orgLevel.High:
+            return "High";
+        default:
+    }
+}

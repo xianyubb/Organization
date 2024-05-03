@@ -1,4 +1,6 @@
 import { Conf } from "../Config/config";
+import { isHasOrg } from "../Form/Forms";
+import { XYSignal } from "../i18n/signal";
 
 function RegCommand() {
     const cmd = mc.newCommand("organization", i18n.get("Command_Description", Conf.language), PermType.Any);
@@ -15,7 +17,8 @@ function RegCommand() {
     cmd.overload(["list"]);          // list
     cmd.overload([]);               // form
     cmd.setCallback((_cmd, ori, _out, result) => {
-        if (!ori.player) return;
+        if (!ori.player) _out.error(XYSignal("ConsoleCmd", Conf.language));
+        const { uuid } = result;
         switch (result.action) {
             case "list":
                 {
@@ -36,7 +39,7 @@ function RegCommand() {
                 }
             default:
                 {
-                    // TODO form
+                    isHasOrg(ori.player);
                     break;
                 }
         }

@@ -96,6 +96,14 @@ export class HandleData {
     get nameList() {
         return this.data.map((_org: orgData) => _org.name);
     }
+
+    /**
+     * 添加公会至文件
+     */
+    addOrg(orgdata: orgData) {
+        this.data.push(orgdata);
+        updateData(this.data);
+    }
 }
 
 

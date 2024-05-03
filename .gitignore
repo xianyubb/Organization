@@ -4,3 +4,4 @@ package-lock.json
 dist
 Organization.llplugin
 Organization
+.VSCodeCounter

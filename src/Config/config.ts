@@ -1,7 +1,7 @@
 
 import { PLUGIN_NAME } from "../..";
 
-const conf = new JsonConfigFile(`.//plugins/${PLUGIN_NAME}//config.json`);
+
 
 
 interface oriConfig {
@@ -40,7 +40,7 @@ type Config = {
     High: unNormal;
 };
 
-const config: Config = {
+export const config: Config = {
     Economy: "Score",
     Score: "money",
     allowCreate: true,
@@ -66,7 +66,6 @@ const config: Config = {
 
 };
 
-conf.write(JSON.stringify(config));
-
+const conf = new JsonConfigFile(`./plugins/${PLUGIN_NAME}/config.json`, JSON.stringify(config));
 /** 配置项 */
-export const Conf: Config = JSON.parse(conf.read());
+export const Conf: Config = JSON.parse(conf.read())

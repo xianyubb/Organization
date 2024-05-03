@@ -1,8 +1,10 @@
 import { Conf } from "../Config/config";
 import { HandleData } from "../Data/handleData";
 import { orgData } from "../Data/orgData";
+import { playerData } from "../Data/playerData";
+import { reduceMoney } from "../Economic/Economic";
 import { orgLevel, playerLevel } from "../Enum/orgEnum";
-import { createSystemMessage } from "../i18n/signal";
+import { XYMessage } from "../i18n/signal";
 import { Organization } from "./Org";
 
 // 生成随机码
@@ -43,7 +45,7 @@ export function createOrg(player: Player, orgName: string) {
                 transPoints: [],
                 mainPosition: {
                     name: "总部",
-                    pos: [0, 0, 0]
+                    pos: [0, 0, 0, 0]
                 },
                 cpf: 0,
                 getCpfLevel: playerLevel.Manager
@@ -51,10 +53,18 @@ export function createOrg(player: Player, orgName: string) {
             applyList: []
         };
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const a = new Organization(orgdata);
+        const a = new HandleData();
+        a.addOrg(orgdata);
+        const b: Array<string> = playerData.get(player.xuid);
+        if (b.indexOf(orgdata.uuid) === -1) {
+            b.push(orgdata.uuid);
+            playerData.set(player.xuid, b);
+        }
+        player.tell(XYMessage("CreateOrgSuccess", Conf.language));
+        reduceMoney(player, Conf.Normal.cteateMoney);
     } catch (error) {
         logger.error(error);
-        player.tell(createSystemMessage("Error", Conf.language));
+        player.tell(XYMessage("Error", Conf.language));
     }
 
 }
@@ -65,7 +75,7 @@ export function createOrg(player: Player, orgName: string) {
  */
 export function orgList(player: Player) {
     const data = new HandleData();
-    player.tell(createSystemMessage("PLayer_Call_List", Conf.language, data.orgNum, data.nameList.join(",")));
+    player.tell(XYMessage("PLayer_Call_List", Conf.language, data.orgNum, data.nameList.join(",")));
 }
 
 /** 玩家申请加入公会 
@@ -77,7 +87,7 @@ export function applyJoinOrg(player: Player, uuid: string) {
         const data = new HandleData();
         const orgdata = data.getOrgData(uuid);
         if (orgdata === null) {
-            player.tell(createSystemMessage("NoFindOrg", Conf.language));
+            player.tell(XYMessage("NoFindOrg", Conf.language));
             return;
         }
         const org = new Organization(orgdata);
@@ -87,11 +97,11 @@ export function applyJoinOrg(player: Player, uuid: string) {
             level: playerLevel.Member,
             time: new Date().toLocaleString("zh", { hour12: false }).replaceAll("/", "-"),
         });
-        player.tell(createSystemMessage("ApplyJoinOrg", Conf.language));
+        player.tell(XYMessage("ApplyJoinOrgSuccess", Conf.language));
     }
     catch (error) {
         logger.error(error);
-        player.tell(createSystemMessage("Error", Conf.language));
+        player.tell(XYMessage("Error", Conf.language));
     }
 }
 
@@ -105,16 +115,27 @@ export function quitOrg(player: Player, uuid: string) {
         const data = new HandleData();
         const orgdata = data.getOrgData(uuid);
         if (orgdata === null) {
-            player.tell(createSystemMessage("NoFindOrg", Conf.language));
+            player.tell(XYMessage("NoFindOrg", Conf.language));
             return;
         }
         const org = new Organization(orgdata);
+
         org.kickMember(player.xuid);
-        player.tell(createSystemMessage("QuitOrg", Conf.language));
+        player.tell(XYMessage("QuitOrgSuccess", Conf.language));
+        const a: Array<string> = playerData.get(player.xuid);
+
+        a.find((_uuid, index) => {
+            if (uuid === _uuid) {
+                a.splice(index, 1);
+                playerData.set(player.xuid, a);
+                return true;
+            }
+            return false;
+        });
     }
     catch (error) {
         logger.error(error);
-        player.tell(createSystemMessage("Error", Conf.language));
+        player.tell(XYMessage("Error", Conf.language));
     }
 }
 
@@ -127,21 +148,32 @@ export function deleteOrg(player: Player, uuid: string) {
         const data = new HandleData();
         const orgdata = data.getOrgData(uuid);
         if (orgdata === null) {
-            player.tell(createSystemMessage("NoFindOrg", Conf.language));
+            player.tell(XYMessage("NoFindOrg", Conf.language));
             return;
         }
         const org = new Organization(orgdata);
         const orgpl = org.members.at(org.findPlayer(player.xuid));
         if (orgpl.level === playerLevel.Owner) {
+            org.members.forEach((orgmember) => {
+                const a: Array<string> = playerData.get(orgmember.xuid);
+                a.find((_uuid, index) => {
+                    if (org.uuid === _uuid) {
+                        a.splice(index, 1);
+                        playerData.set(player.xuid, a);
+                        return true;
+                    }
+                    return false;
+                });
+            });
             data.deleteOrg(org.uuid);
-            player.tell(createSystemMessage("DeleteOrg_Success", Conf.language));
+            player.tell(XYMessage("DeleteOrgSuccess", Conf.language));
         }
         else {
-            player.tell(createSystemMessage("PermissionsNotEnough", Conf.language));
+            player.tell(XYMessage("PermissionsNotEnough", Conf.language));
         }
     }
     catch (error) {
         logger.error(error);
-        player.tell(createSystemMessage("Error", Conf.language));
+        player.tell(XYMessage("Error", Conf.language));
     }
 }
