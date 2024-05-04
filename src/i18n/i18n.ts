@@ -30,7 +30,7 @@ const lang = {
         "JoinFormContent": "请按提示操作...",
         "JoinOrgInputDescription": "输入加入公会的uuid",
         "ManagerFormTitle": "管理公会",
-        "ManagerFormContent": "请按提示操作...",
+        "ManagerFormContent": "公会uuid: {0}",
         "GoTOMainPosition": "前往总部",
         "GoTOMainPositionSuccess": "成功前往总部",
         "GoTOMainPositionFailed": "前往总部失败",

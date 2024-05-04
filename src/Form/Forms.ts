@@ -515,7 +515,7 @@ export function ManagerForm(player: Player, uuid: string) {
         Form.send();
     };
 
-    const Form = new XYSimpleForm(XYSignal("ManagerFormTitle", lang), XYSignal("ManagerFormContent", lang), player);
+    const Form = new XYSimpleForm(XYSignal("ManagerFormTitle", lang), XYSignal("ManagerFormContent", lang, uuid), player);
     Form.addButton(XYSignal("GoTOMainPosition", lang), (pl: Player) => {
         const main = orgdata.manager.mainPosition.pos;
         const pos = new IntPos(Math.floor(main[0]), Math.floor(main[1]), Math.floor(main[2]), Math.floor(main[3]));
