@@ -23,9 +23,9 @@ jobs:
           cp manifest.json Organization/
       - name: pack plugin
         run: |
-          cd dist && 7z a -tzip -r Organization.llplugin .
+          cd Organization && 7z a -tzip -r Organization.llplugin .
       - name: upload
         uses: actions/upload-artifact@v2
         with:
           name: Organization
-          path: dist/Organization.llplugin
+          path: Organization/Organization.llplugin
