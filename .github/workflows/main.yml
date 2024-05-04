@@ -3,6 +3,8 @@ name: Build
 on:
   workflow_dispatch:
   push:
+    tsgs:
+      - 'v0.*' 
 
 jobs:
   build:
@@ -28,3 +30,9 @@ jobs:
         with:
           name: Organization.llplugin
           path: Organization/
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Organization
+          file: ./out/Organization.llplugin
+          
