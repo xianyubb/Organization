@@ -1,0 +1,31 @@
+name: Build
+
+on:
+  workflow_dispatch:
+  push:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+        with:
+          submodules: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: build
+        run: |
+          npm install -g pnpm
+          pnpm install
+          pnpm run build
+          cp package.json Organization/
+          cp manifest.json Organization/
+      - name: pack plugin
+        run: |
+          cd dist && 7z a -tzip -r Organization.llplugin .
+      - name: upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Organization
+          path: dist/Organization.llplugin
