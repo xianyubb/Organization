@@ -21,11 +21,8 @@ jobs:
           pnpm run build
           cp package.json Organization/
           cp manifest.json Organization/
-      - name: pack plugin
-        run: |
-          cd Organization && 7z a -tzip -r Organization.llplugin .
       - name: upload
         uses: actions/upload-artifact@v4
         with:
-          name: Organization
+          name: Organization.llplugin
           path: Organization/
