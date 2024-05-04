@@ -25,7 +25,7 @@ jobs:
         run: |
           cd Organization && 7z a -tzip -r Organization.llplugin .
       - name: upload
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: Organization
-          path: Organization/Organization.llplugin
+          path: Organization/
