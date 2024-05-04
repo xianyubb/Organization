@@ -8,7 +8,8 @@
   },
   "scripts": {
     "package": ".\\Scripts\\package.cmd",
-    "watch": "tsc --watch"
+    "watch": "tsc --watch",
+    "build":"tsc"
   },
   "devDependencies": {
     "@types/node": "^20.12.4",
