@@ -35,12 +35,10 @@ export function addmoney(player: Player, amount: number) {
     } else if (Conf.Economy === "LLmoney") {
         if (money.add(player.xuid, amount)) {
             player.tell(XYMessage("AddMoneySuccess", Conf.language, amount));
-
-        } else {
+            return true;
+        } 
             player.tell(XYMessage("AddMoneyFailure", Conf.language));
             return false;
-        }
-        return false;
     } else {
         logger.error(XYMessage("EconomicTypeCouldNotBeFound", Conf.language));
         return false;
@@ -63,8 +61,6 @@ export function reduceMoney(player: Player, amount: number) {
                     return true;
                 }
                 player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
-                return false;
-
             }
             catch (e) {
                 logger.error(e);
@@ -73,13 +69,11 @@ export function reduceMoney(player: Player, amount: number) {
             return false;
         }
     } else if (Conf.Economy === "LLmoney") {
-        if (money.add(player.xuid, amount)) {
+        if (money.reduce(player.xuid, amount)) {
             player.tell(XYMessage("ReduceMoneySuccess", Conf.language, amount));
-
-        } else {
-            player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
-            return false;
+            return true;
         }
+        player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
         return false;
     } else {
         logger.error(XYMessage("EconomicTypeCouldNotBeFound", Conf.language));

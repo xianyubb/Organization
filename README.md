@@ -12,13 +12,13 @@
 
 ## System
 
-1. - [ ] Gui form
+1. - [x] Gui form
 2. - [x] Body
 3. - [x] Economic
 4. - [ ] interface export
-5. - [ ] Command
+5. - [x] Command
 6. - [x] Config
-7. - [ ] i18n
+7. - [x] i18n
 
 ## Form
 
@@ -26,4 +26,4 @@
 2. - [x] Member Form
 3. - [x] Main Form
 4. - [x] optional Form
-5. - [ ] settings Form
+5. - [x] settings Form

@@ -12,7 +12,6 @@ export const PLUGIN_NAME = manifest.name;
 
 export const path = `./plugins/${PLUGIN_NAME}//Data/`;
 
-export const conf = new JsonConfigFile(`./plugins/${PLUGIN_NAME}/config.json`, JSON.stringify({}));
 
 mc.listen("onServerStarted", () => {
     require("./src/Config/config");

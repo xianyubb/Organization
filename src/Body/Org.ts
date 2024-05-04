@@ -91,6 +91,22 @@ export class Organization {
         return null;
     }
 
+    /** 
+     * 通过Name查找公会中的人
+     * @param name name
+     * @return 
+     */
+    findPlayerDataWithName(name: string) {
+        let i = 0;
+        for (i = 0; i < this.members.length; i += 1) {
+            if (this.members[i].name === name) {
+                return this.members[i];
+            }
+        }
+        return null;
+    }
+
+
     /**
      * 允许玩家加入公会 
      * @param xuid 需要加入的玩家的xuid
@@ -101,6 +117,7 @@ export class Organization {
         let orgmenber: orgMember[];
         for (i = 0; i < this.applyList.length; i += 1) {
             if (this.applyList[i].xuid === xuid) {
+                if (this.members.indexOf(this.members[i]) === -1) return false;
                 this.members.push(this.applyList[i]);
                 orgmenber = this.applyList.splice(i, 1);
                 break;
@@ -161,7 +178,7 @@ export class Organization {
      */
     transferOrg(xuid1: string, xuid2: string) {
         this.members.at(this.findPlayer(xuid1)).level = playerLevel.Member;
-        this.members.at(this.findPlayer(xuid2)).level = playerLevel.Manager;
+        this.members.at(this.findPlayer(xuid2)).level = playerLevel.Owner;
         this.updateData();
         return this.members.at(this.findPlayer(xuid2)).level === playerLevel.Manager;;
     }
@@ -201,13 +218,38 @@ export class Organization {
 
     /**
      * 删除一个传送点
-     * @param tanspoints 传送点
+     * @param tanspoints 传送点名
      * @returns 是否成功删除
      */
-    reduceTransPoint(tanspoints: transPoints) {
-        this.orgdata.manager.transPoints.splice(this.orgdata.manager.transPoints.indexOf(tanspoints), 1);
+    reduceTransPoint(tanspoints: string) {
+        let point = null;
+        this.orgdata.manager.transPoints.find((trans) => {
+            if (trans.name === tanspoints) {
+                point = trans;
+                this.orgdata.manager.transPoints.splice(this.orgdata.manager.transPoints.indexOf(trans), 1);
+                return true;
+            }
+            return false;
+        });
         this.updateData();
-        return this.orgdata.manager.transPoints.indexOf(tanspoints) === -1;
+        return this.orgdata.manager.transPoints.indexOf(point) === -1;
+    }
+
+    /** 
+     * 修改传送点
+     * @param tanspoints 传送点名
+     */
+    changeTransPoint(tanspoints: string, newtranspoint: transPoints) {
+        this.orgdata.manager.transPoints.find((trans, index) => {
+            if (trans.name === tanspoints) {
+                trans = newtranspoint;
+                this.orgdata.manager.transPoints[index] = newtranspoint;
+                return true;
+            }
+            return false;
+        });
+        this.updateData();
+        return this.orgdata.manager.transPoints.indexOf(newtranspoint) !== -1;
     }
 
     /** 
@@ -262,6 +304,15 @@ export class Organization {
         this.orgdata.applyList.push(player);
         this.updateData();
         return this.orgdata.applyList.indexOf(player) !== -1;
+    }
+
+    /** 
+     * 修改玩家等级
+     */
+    changePlayerLevel(xuid: string, level: playerLevel) {
+        this.members.at(this.findPlayer(xuid)).level = level;
+        this.updateData();
+        return this.members.at(this.findPlayer(xuid)).level === level;
     }
 }
 

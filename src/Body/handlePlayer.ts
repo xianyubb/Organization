@@ -44,7 +44,7 @@ export function createOrg(player: Player, orgName: string) {
                 maxPlayer: Conf.Normal.maxPlayer,
                 transPoints: [],
                 mainPosition: {
-                    name: "总部",
+                    name: "MainPosition",
                     pos: [0, 0, 0, 0]
                 },
                 cpf: 0,
