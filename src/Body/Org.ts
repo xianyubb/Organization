@@ -67,6 +67,7 @@ export class Organization {
      * @return 下标 没有找到即为-1
      */
     findPlayer(xuid: string) {
+        this.updateData();
         let i = 0;
         for (i = 0; i < this.members.length; i += 1) {
             if (this.members[i].xuid === xuid) {
@@ -180,7 +181,7 @@ export class Organization {
         this.members.at(this.findPlayer(xuid1)).level = playerLevel.Member;
         this.members.at(this.findPlayer(xuid2)).level = playerLevel.Owner;
         this.updateData();
-        return this.members.at(this.findPlayer(xuid2)).level === playerLevel.Manager;;
+        return this.members.at(this.findPlayer(xuid2)).level === playerLevel.Owner;
     }
 
     /** 

@@ -154,16 +154,11 @@ export function deleteOrg(player: Player, uuid: string) {
         const org = new Organization(orgdata);
         const orgpl = org.members.at(org.findPlayer(player.xuid));
         if (orgpl.level === playerLevel.Owner) {
+            playerData.reload();
             org.members.forEach((orgmember) => {
                 const a: Array<string> = playerData.get(orgmember.xuid);
-                a.find((_uuid, index) => {
-                    if (org.uuid === _uuid) {
-                        a.splice(index, 1);
-                        playerData.set(player.xuid, a);
-                        return true;
-                    }
-                    return false;
-                });
+                a.splice(a.indexOf(uuid));
+                playerData.set(orgmember.xuid, a);
             });
             data.deleteOrg(org.uuid);
             player.tell(XYMessage("DeleteOrgSuccess", Conf.language));
