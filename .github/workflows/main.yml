@@ -34,5 +34,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: Organization
-          path: ./out/Organization.llplugin
+          files: ./out/Organization.llplugin
           
