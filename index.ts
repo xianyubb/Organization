@@ -1,7 +1,7 @@
 
 
 // LiteLoader-AIDS automatic generated
-/// <reference path="d:\Dev\Xianyubb-Dev/dts/helperlib/src/index.d.ts"/>
+/// <reference path="./HelperLib/src/index.d.ts"/>
 
 
 

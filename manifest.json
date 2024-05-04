@@ -1,5 +1,5 @@
 {
-  "name": "organization",
+  "name": "Organization",
   "entry": "index.js",
   "type": "lse-nodejs",
   "version": "0.1.0",
