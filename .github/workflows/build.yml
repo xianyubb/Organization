@@ -3,8 +3,6 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    tags:
-      - 'v*.*.*' 
 
 jobs:
   build:
@@ -30,9 +28,3 @@ jobs:
         with:
           name: Organization
           path: Organization/
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Organization
-          files: ./out/Organization.llplugin
-          
