@@ -1,3 +1,6 @@
 [submodule "HelperLib"]
 	path = HelperLib
 	url = https://github.com/LiteLDev/HelperLib
+[submodule "org_out"]
+	path = org_out
+	url = https://github.com/xianyubb/org_out.git
