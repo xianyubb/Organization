@@ -15,6 +15,8 @@ jobs:
         with:
           node-version: '20'
       - name: build
+        env:
+         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
         run: |
           npm install -g pnpm
           pnpm install
@@ -24,6 +26,12 @@ jobs:
           mkdir out
           cd Organization && 7z a -tzip -r ../out/Organization.llplugin .
           7z a -tzip -r ../out/Organization.zip .
+          git config user.name "xianyubb"
+          git config user.email "2149656630@qq.com"
+          git add -f .
+          git commit -a -m "now"
+          git remote add target https://github.com/xianyubb/org_out
+          git push target HEAD:refs/heads/main
       - name: upload
         uses: actions/upload-artifact@v4
         with:
