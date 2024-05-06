@@ -1,0 +1,17 @@
+{
+    "format_version": 2,
+    "tooth": "github.com/xianyubb/Organization",
+    "version": "1.0.1",
+    "info": {
+        "name": "Organization",
+        "description": "Organization plugins for LeviLamina",
+        "author": "xianyubb",
+        "tags": [
+            "levilamina",
+            "nodejs"
+        ]
+    },
+    "dependencies": {
+        "gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs"
+    }
+}
