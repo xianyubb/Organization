@@ -11,5 +11,13 @@
 
   "dependencies": {
     "gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs": "0.7.x"
+  },
+  "files": {
+    "place": [
+      {
+        "src": "Organization/*",
+        "dest": "plugins/Organization/"
+      }
+    ]
   }
 }
