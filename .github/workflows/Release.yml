@@ -25,7 +25,7 @@ jobs:
           cp manifest.json Organization/
           mkdir out
           cd Organization && 7z a -tzip -r ../out/Organization.llplugin .
-          cd Organization && 7z a -tzip -r ../out/Organization.zip .
+          7z a -tzip -r ../out/Organization.zip .
       - name: upload
         uses: actions/upload-artifact@v4
         with:
