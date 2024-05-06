@@ -3,7 +3,7 @@
   // 其他 tsconfig 配置
     "module": "CommonJS",
     "rootDir": ".",
-    "outDir": "./dist",
+    "outDir": "./org_out",
     "target": "ES2021",
     "lib": [ "ES2021" ],
     "sourceMap": false,

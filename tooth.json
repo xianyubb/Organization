@@ -1,6 +1,6 @@
 {
   "format_version": 2,
-  "tooth": "github.com/xianyubb/Organization",
+  "tooth": "github.com/xianyubb/org_out",
   "version": "1.0.5",
   "info": {
     "name": "Organization",
@@ -15,7 +15,7 @@
   "files": {
     "place": [
       {
-        "src": "Organization/*",
+        "src": "./*",
         "dest": "plugins/Organization/"
       }
     ]
