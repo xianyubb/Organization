@@ -3,7 +3,7 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    - paths: '**.ts'
+    paths: '**.ts'
 jobs:
   build:
     runs-on: ubuntu-latest
