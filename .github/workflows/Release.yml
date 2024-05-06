@@ -3,8 +3,8 @@ name: Release
 on:
   workflow_dispatch:
   push:
-    tags:
-      - 'v*.*.*' 
+    # tags:
+    #   - 'v*.*.*' 
 
 jobs:
   build:
@@ -23,17 +23,28 @@ jobs:
           pnpm run build
           cp package.json Organization/
           cp manifest.json Organization/
+          cp tooth.json Organization/
           mkdir out
           cd Organization && 7z a -tzip -r ../out/Organization.llplugin .
           7z a -tzip -r ../out/Organization.zip .
+          git config --local user.email "2149656630@qq.com"
+          git config --local user.name "xianyubb"
+          git add .
+          git commit -m "new"
+      - name: Push to anothor repository
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.PAT_TOKEN }}
+          repository: https://github.com/xianyubb/org_out
+          force: true
       - name: upload
         uses: actions/upload-artifact@v4
         with:
           name: Organization
           path: Organization/
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Organization
-          files: ./out/*
+      # - name: Release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     name: Organization
+      #     files: ./out/*
           
