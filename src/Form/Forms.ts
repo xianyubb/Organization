@@ -2,10 +2,10 @@ import { Organization } from "../Body/Org";
 import { applyJoinOrg, createOrg, deleteOrg, quitOrg } from "../Body/handlePlayer";
 import { Conf } from "../Config/config";
 import { HandleData } from "../Data/handleData";
-import { transPoints } from "../Data/orgData";
+import { orgMember, transPoints } from "../Data/orgData";
 import { playerData } from "../Data/playerData";
 import { addmoney, reduceMoney } from "../Economic/Economic";
-import { LeveltoString, playerLevel } from "../Enum/orgEnum";
+import { LeveltoString, orgLevel, playerLevel } from "../Enum/orgEnum";
 import { XYSignal, XYMessage } from "../i18n/signal";
 import { XYCustomForm } from "./FormHelper/CustomForm";
 import { XYSimpleForm } from "./FormHelper/SimpleForm";
@@ -103,62 +103,63 @@ function settingForm(player: Player, uuid: string) {
             .send();
     }
 
-    /**
-     * 更改公会内玩家权限
-     * @param _pl 操作者
-     * @returns 
-     */
-    function ChangeLevelForm(_pl: Player) {
-        if (org.findPlayerData(_pl.xuid).level !== playerLevel.Owner) {
-            player.tell(XYMessage("PermissionsNotEnough", lang));
-            return;
-        }
-        const Form = new XYCustomForm(XYSignal("ChangeLevelFormTitle", lang), _pl);
-        const playerList: Array<string> = [];
-        orgdata.members.forEach((orgmember) => {
-            playerList.push(orgmember.name);
-        });
-        Form.addDropdown(XYSignal("ChangeLevelDropdown", lang), playerList, (_data: any, pl: Player) => {
-            if (_data === null) {
-                pl.tell(XYMessage("CloseForm", lang));
-                return;
-            }
-            if (_data === -1) {
-                pl.tell(XYMessage("ChangeLevelFailed", lang));
-                return;
-            }
-            const orgmember = org.findPlayerData(orgdata.members[_data].xuid);
-            if (!orgmember) {
-                pl.tell(XYMessage("ChangeLevelFailed", lang));
-            }
-            const Form2 = new XYCustomForm(XYSignal("ChangeLevelFormTitle", lang), pl);
-            Form2.addDropdown(XYSignal("ChangeLevelFormLevel", lang), [XYSignal("Member", lang), XYSignal("Manager", lang)], (_datas: any, pla: Player) => {
-                if (_datas === null) {
-                    pl.tell(XYMessage("ChangeLevelFailed", lang));
-                    return;
-                }
-                if (_datas === 0) {
-                    if (org.changePlayerLevel(orgdata.members[_data].xuid, playerLevel.Member)) {
-                        pla.tell(XYMessage("ChangeLevelSuccess", lang));
-                    }
-                    else {
-                        pla.tell(XYMessage("ChangeLevelFailed", lang));
-                    }
-                }
-                else if (_datas === 1) {
-                    if (
-                        org.changePlayerLevel(orgdata.members[_data].xuid, playerLevel.Manager)) {
-                        pla.tell(XYMessage("ChangeLevelSuccess", lang));
-                    }
-                    else {
-                        pla.tell(XYMessage("ChangeLevelFailed", lang));
-                    }
-                }
-            }, 0)
-                .send();
-        }, 0)
-            .send();
-    }
+    // /**
+    //  * 更改公会内玩家权限
+    //  * @param _pl 操作者
+    //  * @returns 
+    //  */
+    // function ChangeLevelForm(_pl: Player) {
+    //     if (org.findPlayerData(_pl.xuid).level !== playerLevel.Owner) {
+    //         player.tell(XYMessage("PermissionsNotEnough", lang));
+    //         return;
+    //     }
+    //     const Form = new XYCustomForm(XYSignal("ChangeLevelFormTitle", lang), _pl);
+    //     const playerList: Array<string> = [];
+    //     orgdata.members.forEach((orgmember) => {
+    //         playerList.push(orgmember.name);
+    //     });
+    //     Form.addDropdown(XYSignal("ChangeLevelDropdown", lang), playerList, (_data: any, pl: Player) => {
+    //         if (_data === null) {
+    //             pl.tell(XYMessage("CloseForm", lang));
+    //             return;
+    //         }
+    //         if (_data === -1) {
+    //             pl.tell(XYMessage("ChangeLevelFailed", lang));
+    //             return;
+    //         }
+    //         const orgmember = org.findPlayerData(orgdata.members[_data].xuid);
+    //         if (!orgmember) {
+    //             pl.tell(XYMessage("ChangeLevelFailed", lang));
+    //         }
+    //         const Form2 = new XYCustomForm(XYSignal("ChangeLevelFormTitle", lang), pl);
+    //         Form2.addDropdown(XYSignal("ChangeLevelFormLevel", lang), [XYSignal("Member", lang), XYSignal("Manager", lang)], (_datas: any, pla: Player) => {
+    //             if (_datas === null) {
+    //                 pl.tell(XYMessage("ChangeLevelFailed", lang));
+    //                 return;
+    //             }
+    //             if (_datas === 0) {
+    //                 if (org.changePlayerLevel(orgdata.members[_data].xuid, playerLevel.Member)) {
+    //                     pla.tell(XYMessage("ChangeLevelSuccess", lang));
+    //                 }
+    //                 else {
+    //                     pla.tell(XYMessage("ChangeLevelFailed", lang));
+    //                 }
+    //             }
+    //             else if (_datas === 1) {
+    //                 if (
+    //                     org.changePlayerLevel(orgdata.members[_data].xuid, playerLevel.Manager)) {
+    //                     pla.tell(XYMessage("ChangeLevelSuccess", lang));
+    //                 }
+    //                 else {
+    //                     pla.tell(XYMessage("ChangeLevelFailed", lang));
+    //                 }
+    //             }
+    //         }, 0)
+    //             .send();
+    //     }, 0)
+    //         .send();
+    // }
+
 
 
     /**
@@ -166,42 +167,67 @@ function settingForm(player: Player, uuid: string) {
      * @param _pl 操作者
      */
     function ManageMemberForm(_pl: Player) {
+
+
+        function funcList(pl: Player, orgmember: orgMember) {
+            const Form = new XYSimpleForm(XYSignal("ManageMemberFormTitle", lang), XYSignal("ManageMemberFormContent2", lang), pl);
+            Form.addButton(XYSignal("KickMember", lang), (_play: Player) => {
+                if (orgmember.level === playerLevel.Owner) {
+                    deleteOrg(_play, orgdata.uuid);
+                    return;
+                }
+                if (org.kickMember(orgmember.xuid)) {
+                    _play.tell(XYMessage("KickMemberSuccess", lang));
+                } else {
+                    _play.tell(XYMessage("KickMemberFailed", lang));
+                }
+            })
+                .addButton(XYSignal("ManageMemberPermission", lang), (_play: Player) => {
+                    const Form2 = new XYCustomForm(XYSignal("ChangeLevelFormTitle", lang), _play);
+                    Form2.addDropdown(XYSignal("ChangeLevelFormLevel", lang), [XYSignal("Member", lang), XYSignal("Manager", lang)], (_datas: any, pla: Player) => {
+                        if (_datas === null) {
+                            pl.tell(XYMessage("ChangeLevelFailed", lang));
+                            return;
+                        }
+                        if (_datas === 0) {
+                            if (org.changePlayerLevel(orgmember.xuid, playerLevel.Member)) {
+                                pla.tell(XYMessage("ChangeLevelSuccess", lang));
+                            }
+                            else {
+                                pla.tell(XYMessage("ChangeLevelFailed", lang));
+                            }
+                        }
+                        else if (_datas === 1) {
+                            if (
+                                org.changePlayerLevel(orgmember.xuid, playerLevel.Manager)) {
+                                pla.tell(XYMessage("ChangeLevelSuccess", lang));
+                            }
+                            else {
+                                pla.tell(XYMessage("ChangeLevelFailed", lang));
+                            }
+                        }
+                    }, 0)
+                        .send();
+                });
+            Form.send();
+        }
+
         const Form = new XYSimpleForm(XYSignal("ManageMemberFormTitle", lang), XYSignal("ManageMemberFormContent", lang), _pl);
         // 逻辑
         // for owner 显示全部玩家
         // for manager 显示成员
         if (org.findPlayerData(_pl.xuid).level === playerLevel.Owner) {
-            orgdata.members.forEach((orgMember) => {
-                Form.addButton(orgMember.name, (_player: Player) => {
-                    const Form2 = new XYSimpleForm(XYSignal("ManageMemberFormTitle", lang), XYSignal("ManageMemberFormContent2", lang), _player);
-                    Form2.addButton(XYSignal("KickMember", lang), (_play: Player) => {
-                        if (orgMember.level === playerLevel.Owner) {
-                            deleteOrg(_play, orgdata.uuid);
-                            return;
-                        }
-                        if (org.kickMember(orgMember.xuid)) {
-                            _play.tell(XYMessage("KickMemberSuccess", lang));
-                        } else {
-                            _play.tell(XYMessage("KickMemberFailed", lang));
-                        }
-                    });
-                    Form2.send();
+            orgdata.members.forEach((orgmember) => {
+                Form.addButton(orgmember.name, (_player: Player) => {
+                    funcList(_player, orgmember);
                 });
             });
             Form.send();
         } else if (org.findPlayerData(_pl.xuid).level === playerLevel.Manager) {
-            orgdata.members.forEach((orgMember) => {
-                if (orgMember.level === playerLevel.Member) {
-                    Form.addButton(orgMember.name, (_player: Player) => {
-                        const Form2 = new XYSimpleForm(XYSignal("ManageMemberFormTitle", lang), XYSignal("ManageMemberFormContent", lang), _player);
-                        Form2.addButton(XYSignal("KickMember", lang), (_play: Player) => {
-                            if (org.kickMember(orgMember.xuid)) {
-                                _play.tell(XYMessage("KickMemberSuccess", lang));
-                            } else {
-                                _play.tell(XYMessage("KickMemberFailed", lang));
-                            }
-                        });
-                        Form2.send();
+            orgdata.members.forEach((orgmember) => {
+                if (orgmember.level === playerLevel.Member) {
+                    Form.addButton(orgmember.name, (_player: Player) => {
+                        funcList(_player, orgmember);
                     });
                 }
             });
@@ -209,11 +235,31 @@ function settingForm(player: Player, uuid: string) {
         }
     }
 
+    let level: "Normal" | "Middle" | "High" = "Normal";
+    switch (orgdata.level) {
+        case orgLevel.Normal:
+            level = "Normal";
+            break;
+        case orgLevel.Middle:
+            level = "Middle";
+            break;
+        case orgLevel.High:
+            level = "High";
+            break;
+        default: { /* empty */ }
+    }
+
     /**
      * 传送点管理表单
      */
     function TransPointsManagerForm(_pl: Player) {
+
         function AddTransPointsForm(_play: Player) {
+
+            if (orgdata.manager.transPoints.length >= Conf[level].maxTransPoints) {
+                _play.tell(XYMessage("OverMaxTransPoints", lang));
+                return;
+            }
             const Form = new XYCustomForm(XYSignal("AddTransPointsFormTitle", lang), _play);
             let name: string = "";
             Form.addInput(XYSignal("AddTransPointsFormName", lang), (datas, pl) => {
@@ -358,8 +404,8 @@ function settingForm(player: Player, uuid: string) {
      */
     function CheckApplyMemberForm(player1: Player) {
         const Form = new XYSimpleForm(XYSignal("CheckApplyMemberFormTitle", lang), XYSignal("CheckApplyMemberFormContent", lang), player1);
-        orgdata.applyList.forEach((orgMember) => {
-            Form.addButton(orgMember.name, (_player: Player) => {
+        orgdata.applyList.forEach((orgmember) => {
+            Form.addButton(orgmember.name, (_player: Player) => {
                 _player.sendModalForm(
                     XYSignal("CheckApplyMemberTitle2", lang),
                     XYSignal("CheckApplyMemberContent", lang),
@@ -390,9 +436,9 @@ function settingForm(player: Player, uuid: string) {
     function ChangeOwnerForm(_player: Player) {
         const Form = new XYSimpleForm(XYSignal("ChangeOwnerFormTitle", lang), XYSignal("ChangeOwnerFormContent", lang), _player);
         if (org.findPlayerData(_player.xuid).level === playerLevel.Owner) {
-            orgdata.members.forEach((orgMember) => {
-                Form.addButton(orgMember.name, (_player1: Player) => {
-                    if (org.transferOrg(_player1.xuid, orgMember.xuid)) {
+            orgdata.members.forEach((orgmember) => {
+                Form.addButton(orgmember.name, (_player1: Player) => {
+                    if (org.transferOrg(_player1.xuid, orgmember.xuid)) {
                         _player1.tell(XYMessage("TransferOrgSuccess", lang));
                     } else {
                         _player1.tell(XYMessage("TransferOrgFailed", lang));
@@ -400,15 +446,17 @@ function settingForm(player: Player, uuid: string) {
                 });
             });
             Form.send();
+        } else {
+            _player.tell(XYMessage("PermissionsNotEnough", lang));
         }
     }
     const Form = new XYSimpleForm(XYSignal("SettingFormTitle", lang), XYSignal("SettingFormContent", lang), player);
     Form.addButton(XYSignal("RenameOrg", lang), (pl: Player) => {
         RenameOrgForm(pl);
     })
-        .addButton(XYSignal("SetMemberPermissions", lang), (pl: Player) => {
-            ChangeLevelForm(pl);
-        })
+        // .addButton(XYSignal("SetMemberPermissions", lang), (pl: Player) => {
+        //     ChangeLevelForm(pl);
+        // })
         .addButton(XYSignal("ManageMember", lang), (pl: Player) => {
             ManageMemberForm(pl);
         })
@@ -505,26 +553,38 @@ export function ManagerForm(player: Player, uuid: string) {
         TransPoint.forEach((transPoint) => {
             Form.addButton(transPoint.name, (pl: Player) => {
                 const pos = new IntPos(Math.floor(transPoint.pos[0]), Math.floor(transPoint.pos[1]), Math.floor(transPoint.pos[2]), Math.floor(transPoint.pos[3]));
-                if (pl.teleport(pos)) {
-                    reduceMoney(pl, Conf[LeveltoString(orgdata.level)].TransMoney);
-                    pl.tell(XYMessage("TransPointSuccess", lang));
+                if (reduceMoney(pl, Conf[LeveltoString(orgdata.level)].TransMoney)) {
+                    if (pl.teleport(pos))
+                        pl.tell(XYMessage("TransPointSuccess", lang));
+                    else pl.tell(XYMessage("TransPointFailed", lang));
+                } else {
+                    pl.tell(XYMessage("MoneyNotEnough", lang));
                 }
-                else pl.tell(XYMessage("TransPointFailed", lang));
+
             });
         });
         Form.send();
     };
-
+    /**
+     * 主表单
+     */
     const Form = new XYSimpleForm(XYSignal("ManagerFormTitle", lang), XYSignal("ManagerFormContent", lang, uuid), player);
     Form.addButton(XYSignal("GoTOMainPosition", lang), (pl: Player) => {
         const main = orgdata.manager.mainPosition.pos;
         const pos = new IntPos(Math.floor(main[0]), Math.floor(main[1]), Math.floor(main[2]), Math.floor(main[3]));
         const { level } = orgdata;
-        if (pl.teleport(pos)) {
-            reduceMoney(pl, Conf[LeveltoString(level)].TransMoney);
-            pl.tell(XYMessage("GoTOMainPositionSuccess", lang));
+        if (reduceMoney(pl, Conf[LeveltoString(level)].TransMoney)) {
+            if (pl.teleport(pos))
+                pl.tell(XYMessage("GoTOMainPositionSuccess", lang));
+            else pl.tell(XYMessage("GoTOMainPositionFailed", lang));
+        } else {
+            pl.tell(XYMessage("MoneyNotEnough", lang));
         }
-        else pl.tell(XYMessage("GoTOMainPositionFailed", lang));
+        // if (pl.teleport(pos)) {
+        //     reduceMoney(pl, Conf[LeveltoString(level)].TransMoney);
+        //     pl.tell(XYMessage("GoTOMainPositionSuccess", lang));
+        // }
+        // else pl.tell(XYMessage("GoTOMainPositionFailed", lang));
     })
         .addButton(XYSignal("TransPoints", lang), (pl: Player) => {
             TransPointForm(pl, orgdata.manager.transPoints);

@@ -1,3 +1,4 @@
+import { Conf } from "../Config/config";
 import { HandleData } from "../Data/handleData";
 import { orgData, orgManager, orgMember, transPoints } from "../Data/orgData";
 import { playerData } from "../Data/playerData";
@@ -107,6 +108,22 @@ export class Organization {
         return null;
     }
 
+    getLevel() {
+        let level: "Normal" | "Middle" | "High" = "Normal";
+        switch (this.orgdata.level) {
+            case orgLevel.Normal:
+                level = "Normal";
+                break;
+            case orgLevel.Middle:
+                level = "Middle";
+                break;
+            case orgLevel.High:
+                level = "High";
+                break;
+            default: { /* empty */ }
+        }
+        return level;
+    }
 
     /**
      * 允许玩家加入公会 
@@ -119,6 +136,9 @@ export class Organization {
         for (i = 0; i < this.applyList.length; i += 1) {
             if (this.applyList[i].xuid === xuid) {
                 if (this.members.indexOf(this.members[i]) === -1) return false;
+                if (this.orgdata.members.length >= Conf[this.getLevel()].maxPlayer) {
+                    return false;
+                }
                 this.members.push(this.applyList[i]);
                 orgmenber = this.applyList.splice(i, 1);
                 break;

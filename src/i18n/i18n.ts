@@ -110,7 +110,7 @@ const lang = {
         "CheckApplyMemberAgree": "同意",
         "CheckApplyMemberDisAgree": "拒绝",
         "AllowMemberJoinSuccess": "同意玩家进入公会成功",
-        "AllowMemberJoinFailed": "同意玩家进入公会失败",
+        "AllowMemberJoinFailed": "玩家进入公会失败,可能是当前公会人数已满...",
         "ChangeOwnerFormTitle": "更改公会主人",
         "TransferOrgSuccess": "更改成功",
         "TransferOrgFailed": "更改失败",
@@ -122,7 +122,10 @@ const lang = {
         "CheckApplyMember": "查看申请列表",
         "ChangeOwner": "修改公会主人",
         "ChangeOwnerFormContent": "请选择继承人",
-        "SettingFormContent": "请选择接下来的操作..."
+        "SettingFormContent": "请选择接下来的操作...",
+        "ManageMemberPermission": "管理玩家权限",
+        "OverMaxTransPoints": "超过最大传送点数,无法继续添加传送点",
+        "MoneyNotEnough": "你没有足够的钱完成操作"
     },
     "en_us": {
         "Command_Description": "Organization System",
