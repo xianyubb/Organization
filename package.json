@@ -1,6 +1,6 @@
 {
   "name": "organization",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Organization",
   "main": "index.js",
   "author": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "watch": "tsc --watch",
-    "build": "tsc && copy manifest.json org_out\\ && copy package.json org_out\\"
+    "build": "tsc && copy manifest.json org_out\\ && copy package.json org_out\\ && copy tooth.json org_out\\"
   },
   "devDependencies": {
     "@types/node": "^20.12.4",
