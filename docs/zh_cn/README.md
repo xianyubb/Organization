@@ -41,7 +41,9 @@ lip install gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs
 1. 前往 [Release](https://github.com/xianyubb/Organization/releases/) 下载最新版本
 
 您有可能看到以下场面
+
 ![Release](../images/releases.png)
+
 选择 `Organization.zip` 点击下载
 
 > 若您访问 github.com 速度过慢 可访问镜像网站下载 [Release](https://github.bibk.top/xianyubb/Organization/releases/)
@@ -50,11 +52,13 @@ lip install gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs
 2. 将下载的压缩包解压至 `./path/to/llbds/plugins/` 文件夹下
 
 如图所示
+
 ![Path](../images/path.png)
 
 3. 启动服务器
 
 若出现如下图所示情景 则说明加载成功
+
 ![install](../images/install.png)
 
 4. 修改配置文件
@@ -108,7 +112,9 @@ lip install github.com/xianyubb/Organzation
 1. 前往 [Release](https://github.com/xianyubb/Organization/releases/) 下载最新版本
 
 您有可能看到以下场面
+
 ![Release](../images/releases.png)
+
 选择 `Organization.llplugin` 点击下载
 
 > 若您访问 github.com 速度过慢 可访问镜像网站下载 [Release](https://github.bibk.top/xianyubb/Organization/releases/)
