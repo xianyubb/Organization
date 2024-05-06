@@ -29,7 +29,7 @@ jobs:
           7z a -tzip -r ../out/Organization.zip .
           git config user.email "2149656630@qq.com"
           git config user.name "xianyubb"
-          git add .
+          git add -f .
           git commit -m "new"
       - name: Push to anothor repository
         uses: ad-m/github-push-action@master
