@@ -36,7 +36,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           repository: xianyubb/org_out
-          force: false
+          force: true
       - name: upload
         uses: actions/upload-artifact@v4
         with:
