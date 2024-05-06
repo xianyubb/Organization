@@ -34,9 +34,9 @@ jobs:
       - name: Push to anothor repository
         uses: ad-m/github-push-action@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: hhh
           repository: xianyubb/org_out
-          force: true
+          force: false
       - name: upload
         uses: actions/upload-artifact@v4
         with:
