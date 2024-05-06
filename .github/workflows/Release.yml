@@ -27,8 +27,8 @@ jobs:
           mkdir out
           cd Organization && 7z a -tzip -r ../out/Organization.llplugin .
           7z a -tzip -r ../out/Organization.zip .
-          git config --local user.email "2149656630@qq.com"
-          git config --local user.name "xianyubb"
+          git config user.email "2149656630@qq.com"
+          git config user.name "xianyubb"
           git add .
           git commit -m "new"
       - name: Push to anothor repository
