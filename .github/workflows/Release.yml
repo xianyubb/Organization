@@ -13,6 +13,12 @@ jobs:
       contents: write           # 'write' access to repository contents
       pull-requests: write      # 'write' access to pull requests
     steps:
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl --request GET \
+          --url "https://api.github.com/xianyubb/org_out" \
+          --header "Authorization: Bearer $GH_TOKEN"
       - uses: actions/checkout@master
         with:
           submodules: true
@@ -37,7 +43,7 @@ jobs:
       - name: Push to anothor repository
         uses: ad-m/github-push-action@master
         with:
-          github_token: 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
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           repository: xianyubb/org_out
           force: true
       - name: upload
