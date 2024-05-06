@@ -16,7 +16,7 @@ jobs:
           node-version: '20'
       - name: build
         env:
-         ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+         github_token: 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
         run: |
           npm install -g pnpm
           pnpm install
