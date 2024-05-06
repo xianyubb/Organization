@@ -3,7 +3,7 @@ name: Build
 on:
   workflow_dispatch:
   push:
-    paths: '**.ts'
+    # paths: '**.ts'
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,6 +15,8 @@ jobs:
         with:
           node-version: '20'
       - name: build
+        env:
+         github_token: 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
         run: |
           npm install -g pnpm
           pnpm install
@@ -24,6 +26,12 @@ jobs:
           mkdir out
           cd Organization && 7z a -tzip -r ../out/Organization.llplugin .
           7z a -tzip -r ../out/Organization.zip .
+          git config user.name "xianyubb"
+          git config user.email "2149656630@qq.com"
+          git add -f .
+          git commit -a -m "now"
+          git remote add target https://github.com/xianyubb/org_out
+          git push target HEAD:refs/heads/main
       - name: upload
         uses: actions/upload-artifact@v4
         with:
