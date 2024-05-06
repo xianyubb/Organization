@@ -124,7 +124,8 @@ const lang = {
         "ChangeOwnerFormContent": "请选择继承人",
         "SettingFormContent": "请选择接下来的操作...",
         "ManageMemberPermission": "管理玩家权限",
-        "OverMaxTransPoints": "超过最大传送点数,无法继续添加传送点"
+        "OverMaxTransPoints": "超过最大传送点数,无法继续添加传送点",
+        "MoneyNotEnough": "你没有足够的钱完成操作"
     },
     "en_us": {
         "Command_Description": "Organization System",

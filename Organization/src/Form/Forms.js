@@ -534,12 +534,15 @@ function ManagerForm(player, uuid) {
         TransPoint.forEach((transPoint) => {
             Form.addButton(transPoint.name, (pl) => {
                 const pos = new IntPos(Math.floor(transPoint.pos[0]), Math.floor(transPoint.pos[1]), Math.floor(transPoint.pos[2]), Math.floor(transPoint.pos[3]));
-                if (pl.teleport(pos)) {
-                    (0, Economic_1.reduceMoney)(pl, config_1.Conf[(0, orgEnum_1.LeveltoString)(orgdata.level)].TransMoney);
-                    pl.tell((0, signal_1.XYMessage)("TransPointSuccess", lang));
+                if ((0, Economic_1.reduceMoney)(pl, config_1.Conf[(0, orgEnum_1.LeveltoString)(orgdata.level)].TransMoney)) {
+                    if (pl.teleport(pos))
+                        pl.tell((0, signal_1.XYMessage)("TransPointSuccess", lang));
+                    else
+                        pl.tell((0, signal_1.XYMessage)("TransPointFailed", lang));
                 }
-                else
-                    pl.tell((0, signal_1.XYMessage)("TransPointFailed", lang));
+                else {
+                    pl.tell((0, signal_1.XYMessage)("MoneyNotEnough", lang));
+                }
             });
         });
         Form.send();
@@ -553,12 +556,20 @@ function ManagerForm(player, uuid) {
         const main = orgdata.manager.mainPosition.pos;
         const pos = new IntPos(Math.floor(main[0]), Math.floor(main[1]), Math.floor(main[2]), Math.floor(main[3]));
         const { level } = orgdata;
-        if (pl.teleport(pos)) {
-            (0, Economic_1.reduceMoney)(pl, config_1.Conf[(0, orgEnum_1.LeveltoString)(level)].TransMoney);
-            pl.tell((0, signal_1.XYMessage)("GoTOMainPositionSuccess", lang));
+        if ((0, Economic_1.reduceMoney)(pl, config_1.Conf[(0, orgEnum_1.LeveltoString)(level)].TransMoney)) {
+            if (pl.teleport(pos))
+                pl.tell((0, signal_1.XYMessage)("GoTOMainPositionSuccess", lang));
+            else
+                pl.tell((0, signal_1.XYMessage)("GoTOMainPositionFailed", lang));
         }
-        else
-            pl.tell((0, signal_1.XYMessage)("GoTOMainPositionFailed", lang));
+        else {
+            pl.tell((0, signal_1.XYMessage)("MoneyNotEnough", lang));
+        }
+        // if (pl.teleport(pos)) {
+        //     reduceMoney(pl, Conf[LeveltoString(level)].TransMoney);
+        //     pl.tell(XYMessage("GoTOMainPositionSuccess", lang));
+        // }
+        // else pl.tell(XYMessage("GoTOMainPositionFailed", lang));
     })
         .addButton((0, signal_1.XYSignal)("TransPoints", lang), (pl) => {
         TransPointForm(pl, orgdata.manager.transPoints);
