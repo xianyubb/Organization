@@ -15,7 +15,6 @@ jobs:
           submodules: true
           ref: ${{ github.head_ref }}
           fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
