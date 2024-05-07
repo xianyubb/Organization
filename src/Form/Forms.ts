@@ -526,16 +526,13 @@ export function ManagerForm(player: Player, uuid: string) {
                 } else if (mount < 0) {
                     mount = Math.abs(mount);
                     org.updateData();
-                    if (orgdata.manager.cpf < mount) {
-                        log(3);
+                    if (org.cpf < mount) {
                         pl.tell(XYMessage("CpfFormInputNotEnough", lang));
                         return;
                     }
                     if (addmoney(pl, mount)) {
-                        log(1);
                         org.reduceCpf(mount);
                     } else {
-                        log(2);
                         pl.tell(XYMessage("CpfFormInputNotEnough", lang));
                     }
                 }

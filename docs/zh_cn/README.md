@@ -69,33 +69,33 @@ lip install gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs
 
 > 真实情况下 该 json 文件不会出现注释
 
-```json5
+```json
 {
-  Economy: "Score", // 经济类型 必填 "LLmoney" 或者 "Score"
-  Score: "money", // 计分板名称
-  allowCreate: true, // 是否允许玩家自行创建公会
-  language: "zh_cn", // 语言选项 目前支持 "zh_cn" 和 "en_us"
-  Normal: {
+  "Economy": "Score", // 经济类型 必填 "LLmoney" 或者 "Score"
+  "Score": "money", // 计分板名称
+  "allowCreate": true, // 是否允许玩家自行创建公会
+  "language": "zh_cn", // 语言选项 目前支持 "zh_cn" 和 "en_us"
+  "Normal": {
     // 普通公会配置项
-    maxPlayer: 5, // 此公会最大成员
-    maxTransPoints: 10, // 此公会最多传送点数
-    TransMoney: 0, // 每次传送所消耗的经济
-    cteateMoney: 0, // 创建此公会需要的经济
+    "maxPlayer": 5, // 此公会最大成员
+    "maxTransPoints": 10, // 此公会最多传送点数
+    "TransMoney": 0, // 每次传送所消耗的经济
+    "cteateMoney": 0 // 创建此公会需要的经济
   },
-  Middle: {
+  "Middle": {
     // 中级公会配置项
-    maxPlayer: 10,
-    maxTransPoints: 20,
-    TransMoney: 0,
-    superMoney: 0, // 由普通升级到中级所需要的经济
+    "maxPlayer": 10,
+    "maxTransPoints": 20,
+    "TransMoney": 0,
+    "superMoney": 0 // 由普通升级到中级所需要的经济
   },
-  High: {
+  "High": {
     // 级公会配置项
-    maxPlayer: 20,
-    maxTransPoints: 30,
-    TransMoney: 0,
-    superMoney: 0, // 由中级升级到高级所需要的经济
-  },
+    "maxPlayer": 20,
+    "maxTransPoints": 30,
+    "TransMoney": 0,
+    "superMoney": 0 // 由中级升级到高级所需要的经济
+  }
 }
 ```
 
@@ -104,7 +104,7 @@ lip install gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs
 在安装 `lip` 包管理器后 在 `LLBDS` 根目录下执行
 
 ```bash
-lip install github.com/xianyubb/Organzation
+lip install github.com/xianyubb/org_out
 ```
 
 ### 若您为 `LiteLoaderBDS` 用户

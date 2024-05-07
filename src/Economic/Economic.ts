@@ -1,12 +1,10 @@
 import { Conf } from "../Config/config";
 import { XYMessage } from "../i18n/signal";
 
-let Score: Objective = null;
-if (Conf.Economy === "Score") {
-    Score = mc.getScoreObjective(Conf.Score);
-}
-
-
+// let Score: Objective = null;
+// if (Conf.Economy === "Score") {
+//     Score = mc.getScoreObjective(Conf.Score);
+// }
 
 /**
  * 增加玩家存款
@@ -14,35 +12,33 @@ if (Conf.Economy === "Score") {
  * @param amount 
  */
 export function addmoney(player: Player, amount: number) {
+    if (amount === 0) return true;
     if (Conf.Economy === "Score") {
-        if (Score) {
-            try {
-                const old = Score.getScore(player);
-                if (Score.addScore(player, amount) >= old + amount) {
-                    player.tell(XYMessage("AddMoneySuccess", Conf.language, amount));
-                    return true;
-                }
-                player.tell(XYMessage("AddMoneyFailure", Conf.language));
-                return false;
 
+        try {
+            const name = Conf.Score;
+            if (mc.runcmdEx(`scoreboard players add "${player.name}" "${name}" ${amount}`).success) {
+                player.tell(XYMessage("AddMoneySuccess", Conf.language, amount));
+                return true;
             }
-            catch (e) {
-                logger.error(e);
-                player.tell(XYMessage("AddMoneyFailure", Conf.language));
-            }
+            player.tell(XYMessage("AddMoneyFailure", Conf.language));
             return false;
+
         }
-    } else if (Conf.Economy === "LLmoney") {
+        catch (e) {
+            logger.error(e);
+            player.tell(XYMessage("AddMoneyFailure", Conf.language));
+        }
+        return false;
+    } if (Conf.Economy === "LLmoney") {
         if (money.add(player.xuid, amount)) {
             player.tell(XYMessage("AddMoneySuccess", Conf.language, amount));
             return true;
-        } 
-            player.tell(XYMessage("AddMoneyFailure", Conf.language));
-            return false;
-    } else {
-        logger.error(XYMessage("EconomicTypeCouldNotBeFound", Conf.language));
+        }
+        player.tell(XYMessage("AddMoneyFailure", Conf.language));
         return false;
     }
+    logger.error(XYMessage("EconomicTypeCouldNotBeFound", Conf.language));
     return false;
 }
 
@@ -52,33 +48,32 @@ export function addmoney(player: Player, amount: number) {
  * @param amount
  */
 export function reduceMoney(player: Player, amount: number) {
+    if (amount === 0) return true;
     if (Conf.Economy === "Score") {
-        if (Score) {
-            try {
-                const old = Score.getScore(player);
-                if (Score.reduceScore(player, amount) <= old - amount) {
-                    player.tell(XYMessage("ReduceMoneySuccess", Conf.language, amount));
-                    return true;
-                }
-                player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
+        const name = Conf.Score;
+        try {
+            if (mc.runcmdEx(`scoreboard players remove "${player.name}" "${name}" ${amount}`).success) {
+                player.tell(XYMessage("ReduceMoneySuccess", Conf.language, amount));
+                return true;
             }
-            catch (e) {
-                logger.error(e);
-                player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
-            }
+            player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
             return false;
         }
-    } else if (Conf.Economy === "LLmoney") {
+        catch (e) {
+            logger.error(e);
+            player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
+        }
+        return false;
+
+    } if (Conf.Economy === "LLmoney") {
         if (money.reduce(player.xuid, amount)) {
             player.tell(XYMessage("ReduceMoneySuccess", Conf.language, amount));
             return true;
         }
         player.tell(XYMessage("ReduceMoneyFailure", Conf.language));
         return false;
-    } else {
-        logger.error(XYMessage("EconomicTypeCouldNotBeFound", Conf.language));
-        return false;
     }
+    logger.error(XYMessage("EconomicTypeCouldNotBeFound", Conf.language));
     return false;
 }
 
