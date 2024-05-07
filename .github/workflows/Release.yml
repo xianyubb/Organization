@@ -13,12 +13,12 @@ jobs:
       contents: write           # 'write' access to repository contents
       pull-requests: write      # 'write' access to pull requests
     steps:
-      - env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl --request GET \
-          --url "https://api.github.com/xianyubb/org_out" \
-          --header "Authorization: Bearer $GH_TOKEN"
+      # - env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     curl --request GET \
+      #     --url "https://api.github.com/xianyubb/org_out" \
+      #     --header "Authorization: Bearer $GH_TOKEN"
       - uses: actions/checkout@master
         with:
           submodules: true
