@@ -18,8 +18,6 @@ jobs:
       #   env:
       #    github_token: 
         run: |
-          npm install -g pnpm
-          pnpm install
           tsc
           cp package.json Organization/
           cp manifest.json Organization/
