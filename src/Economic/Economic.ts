@@ -56,7 +56,7 @@ export function reduceMoney(player: Player, amount: number) {
         if (Score) {
             try {
                 const old = Score.getScore(player);
-                if (Score.addScore(player, amount) >= old + amount) {
+                if (Score.reduceScore(player, amount) <= old - amount) {
                     player.tell(XYMessage("ReduceMoneySuccess", Conf.language, amount));
                     return true;
                 }
