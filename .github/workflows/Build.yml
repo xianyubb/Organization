@@ -20,7 +20,7 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install
-          pnpm run build
+          tsc
           cp package.json Organization/
           cp manifest.json Organization/
           mkdir out
