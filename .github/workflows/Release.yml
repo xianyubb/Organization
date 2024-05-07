@@ -13,12 +13,12 @@ jobs:
       contents: write           # 'write' access to repository contents
       pull-requests: write      # 'write' access to pull requests
     steps:
-      - env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl --request GET \
-          --url "https://api.github.com/xianyubb/org_out" \
-          --header "Authorization: Bearer $GH_TOKEN"
+      # - env:
+      #     GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   run: |
+      #     curl --request GET \
+      #     --url "https://api.github.com/xianyubb/org_out" \
+      #     --header "Authorization: Bearer $GH_TOKEN"
       - uses: actions/checkout@master
         with:
           submodules: true
@@ -27,19 +27,17 @@ jobs:
           node-version: '20'
       - name: build
         run: |
-          npm install -g pnpm
-          pnpm install
-          pnpm run build
-          cp package.json Organization/
-          cp manifest.json Organization/
-          cp tooth.json Organization/
+          npm install
+          tsc
+          cp package.json org_out/
+          cp manifest.json org_out/
           mkdir out
-          cd Organization && 7z a -tzip -r ../out/Organization.llplugin .
+          cd org_out && 7z a -tzip -r ../out/Organization.llplugin .
           7z a -tzip -r ../out/Organization.zip .
-          # git config --local user.email "2149656630@qq.com"
-          # git config --local user.name "xianyubb"
-          # git add -f .
-          # git commit -m "new"
+        # git config --local user.email "2149656630@qq.com"
+        # git config --local user.name "xianyubb"
+        # git add -f .
+        # git commit -m "new"
       # - name: Push to anothor repository
       #   uses: ad-m/github-push-action@master
       #   with:
@@ -50,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Organization
-          path: Organization/
+          path: org_out/
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
