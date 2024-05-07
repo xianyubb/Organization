@@ -100,7 +100,7 @@ lip install gitea.litebds.com/LiteLDev/legacy-script-engine-nodejs
 在安装 `lip` 包管理器后 在 `LLBDS` 根目录下执行
 
 ```bash
-lip install github.com/xianyubb/Organzation
+lip install github.com/xianyubb/org_out
 ```
 
 ### 若您为 `LiteLoaderBDS` 用户
